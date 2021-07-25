@@ -9,6 +9,9 @@ This repository contains an example code showcasing the use of a 4-bit weight SN
 
 Please run **SNN_train.py** for training the convolutional SNN or **SNN_test.py** for a quick test using saved SNN models. 
 
+## How to cite
+
+
 
 
 
