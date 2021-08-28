@@ -13,9 +13,8 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from torch.optim.lr_scheduler import StepLR
 from sklearn.utils import shuffle
-#torch.manual_seed(1)
-x_sz = 100 #100 #100
-y_sz = 48 #48 50
+x_sz = 100 
+y_sz = 48 
 
 def percision_transfer(x, precision_bit=16, result_p = 4):
 
@@ -40,12 +39,6 @@ def percision_transfer(x, precision_bit=16, result_p = 4):
 
 flag = 1
 def low_precision(state_dict,precision=4):
-    """
-    transfer the weight to low precision weight matrix
-    :param state_dict: the .pth file of model
-    :param precision: target precision like 8 bit
-    :return: state_dict
-    """
     for k in state_dict.keys():
         if k =='thr_h':
             w = state_dict[k].data.cpu().numpy()
@@ -79,14 +72,13 @@ for i in range(data_set.shape[0]):
             if t_e[0,j,k] != t_e[0,j,k]:
                 t_e[0,j,k] = 0
             data_set_in_time[i,:,j,k,int(t_e[0,j,k])] = 1
-            #data_set_in_time[i,:,j,k,::int(t_e[0,j,k]+1)] = 1
             
 data_set_in_time =  data_set_in_time[:,:,:,:,1:] #reject last time bin -> should not spike if zero!    
     
 input_dim_rnn = data_set.shape[2]
 hidden_dim = 120
 output_dim = 5
-batch_size = 128 #200
+batch_size = 128 
 
 data_set_in_time, labels_data = shuffle(data_set_in_time, labels_data, random_state=0)
 
@@ -96,9 +88,6 @@ conv_nbr_1 = 6
 conv_sz_1 = 13#7, 13
 a_c_1_x = x_sz - conv_sz_1 + 1
 a_c_1_y = y_sz - conv_sz_1 + 1
-
-################ CHOOSE IF REUSE GOOD MODEL #################
-
 
 Acc = []
 conf_mat = []

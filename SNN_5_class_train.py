@@ -13,9 +13,9 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from torch.optim.lr_scheduler import StepLR
 from sklearn.utils import shuffle
-#torch.manual_seed(1)
-x_sz = 100 #100 #100
-y_sz = 48 #48 50
+
+x_sz = 100 
+y_sz = 48 
 
 def percision_transfer(x, precision_bit=16, result_p = 4):
 
@@ -40,12 +40,6 @@ def percision_transfer(x, precision_bit=16, result_p = 4):
 
 flag = 1
 def low_precision(state_dict,precision=4):
-    """
-    transfer the weight to low precision weight matrix
-    :param state_dict: the .pth file of model
-    :param precision: target precision like 8 bit
-    :return: state_dict
-    """
     for k in state_dict.keys():
         if k =='thr_h':
             w = state_dict[k].data.cpu().numpy()
@@ -79,9 +73,7 @@ for i in range(data_set.shape[0]):
             if t_e[0,j,k] != t_e[0,j,k]:
                 t_e[0,j,k] = 0
             data_set_in_time[i,:,j,k,int(t_e[0,j,k])] = 1
-            #data_set_in_time[i,:,j,k,::int(t_e[0,j,k]+1)] = 1
             
-#Test_set_in_time =  Test_set_in_time[:,:,:,:,:T_sim] #reject last time bin -> should not spike if zero!
 data_set_in_time =  data_set_in_time[:,:,:,:,1:] #reject last time bin -> should not spike if zero!    
     
 input_dim_rnn = data_set.shape[2]
@@ -94,11 +86,11 @@ data_set_in_time, labels_data = shuffle(data_set_in_time, labels_data, random_st
 criterion = nn.NLLLoss()
 
 conv_nbr_1 = 6 
-conv_sz_1 = 13#7, 13
+conv_sz_1 = 13
 a_c_1_x = x_sz - conv_sz_1 + 1
 a_c_1_y = y_sz - conv_sz_1 + 1
 
-################ CHOOSE IF REUSE GOOD MODEL #################
+
 model = mini_eCNN(x_sz, y_sz, conv_sz_1, conv_nbr_1, hidden_dim, output_dim, criterion=criterion, batch_size=batch_size)
 #model = torch.load("eCNN_best_4.pt")
 
@@ -139,7 +131,6 @@ def train(model, train_loader, optimizer, epochs, batch_size, precision = 4):
             predicted = predicted.t()
             train_acc += (predicted.T[0] == labels).sum() 
         
-        #scheduler.step()
         train_acc = train_acc.data.cpu().numpy()
         print("Epoch: " + str(e) + " Loss: " + str(train_loss_sum.item()/len(train_loader)/(batch_size)) + " Accuracy: " + str(train_acc/(batch_size)/len(train_loader)))
         
@@ -148,10 +139,9 @@ learning_rate = 1e-3
 
 
 base_params = [model.conv1.weight, model.conv1.bias, model.i2h.weight, model.i2h.bias, model.h2o.weight, model.h2o.bias]
-#base_params = [model.conv1.weight, model.conv2.weight, model.i2h.weight, model.h2h.weight, model.h2o.weight]
+
 optimizer = torch.optim.Adam([{'params': base_params},], lr=learning_rate)
-#optimizer = torch.optim.SGD([{'params': base_params},], lr=learning_rate)
-#scheduler = StepLR(optimizer, step_size=10, gamma=.5)
+
 Acc = []
 conf_mat = []
 epochs = 10
