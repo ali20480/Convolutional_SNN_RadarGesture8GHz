@@ -110,7 +110,12 @@ def low_precision(state_dict,precision=8, threshold=1.0):
 
 
 #loads train and test images [0,1], flattened to (1, 28*28), and their labels
-data_set = np.load('dataset_12_class/all_data.npz', allow_pickle = True)['data']
+#data_set = np.load('dataset_12_class/all_data.npz', allow_pickle = True)['data']
+data_set = np.empty(5500, dtype = object)
+for i in range(int(5500/250)):
+    chunk = np.load('dataset_12_class/datachunk_' + str(i) + '.npz', allow_pickle = True)['data']
+    data_set[int(i*250):int((i+1)*250)] = chunk
+    
 labels_data = np.load('dataset_12_class/all_labels.npz', allow_pickle = True)['data']
  
 T_sim = 28 #length of the time dimension, images will be transformed to (28*28, T_sim) joue
