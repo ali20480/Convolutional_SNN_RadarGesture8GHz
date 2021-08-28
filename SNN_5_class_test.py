@@ -15,6 +15,7 @@ from torch.optim.lr_scheduler import StepLR
 from sklearn.utils import shuffle
 x_sz = 100 
 y_sz = 48 
+plt.close('all')
 
 def percision_transfer(x, precision_bit=16, result_p = 4):
 
@@ -48,11 +49,11 @@ def low_precision(state_dict,precision=4):
     return state_dict
 
 #loads train and test images [0,1], flattened to (1, 28*28), and their labels
-with open('pre_processed_dataset_5_class/data_set_k48_B50_z2.npy', 'rb') as f:
+with open('dataset_5_class/data_set_k48_B50_z2.npy', 'rb') as f:
     data_set = np.load(f)
     #Test_set_down = np.reshape(Test_set_down, (Test_set_down.shape[0], Test_set_down.shape[1], x_sz, y_sz))
     
-with open('pre_processed_dataset_5_class/labels_k48_B50_z2.npy', 'rb') as f:
+with open('dataset_5_class/labels_k48_B50_z2.npy', 'rb') as f:
     labels_data = np.load(f)
     
     
@@ -140,4 +141,27 @@ print("Mean accuracy:" + str(np.mean(np.array(Acc))))
 print("Standard" + str(np.std(np.array(Acc))))
 
 
+import seaborn as sn
+import pandas as pd
+import matplotlib.pyplot as plt
+array = conf_mat[0]
+array2 = np.zeros(array.shape)
+for i in range(array.shape[0]):
+    for j in range(len(conf_mat)):
+        array = conf_mat[j]
+        array2[i,:] += array[i,:] / np.sum(array[i,:])
 
+array22 = array2 / len(conf_mat)
+array22[array22 < 0.0035] = 0
+acc_acc = 0
+for i in range(array22.shape[0]):
+    acc_acc += array22[i,i]
+acc_acc = acc_acc / array22.shape[0]
+print(acc_acc) 
+  
+lli = ['1', '2', '3', '4', '5']
+df_cm = pd.DataFrame(array22, index = [i for i in lli],
+                  columns = [i for i in lli])
+plt.figure(figsize = (10,7))
+ax = sn.heatmap(df_cm, annot=True, cbar=False, cmap = "YlGn")
+ax.set(xlabel='Predicted label', ylabel='True label')

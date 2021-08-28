@@ -13,7 +13,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 from torch.optim.lr_scheduler import StepLR
 from sklearn.utils import shuffle
-
+plt.close('all')
 x_sz = 32 
 y_sz = 32 
 
@@ -146,24 +146,17 @@ for i in range(array.shape[0]):
         array = conf_mat[j]
         array2[i,:] += array[i,:] / np.sum(array[i,:])
 
-array2 = array2 / len(conf_mat)
-array22 = array2[1:,1:]  
-
-for i in range(array22.shape[0]):
-    array22[i,:] = array22[i,:] / np.sum(array22[i,:])
-    idx = np.argwhere(array22[i,:] <= 0.0025)[:,0]
-    array22[i,idx] = 0
-
+array22 = array2 / len(conf_mat)
+array22[array22 < 0.0035] = 0
 acc_acc = 0
 for i in range(array22.shape[0]):
     acc_acc += array22[i,i]
 acc_acc = acc_acc / array22.shape[0]
 print(acc_acc) 
   
-lli = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
+lli = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 df_cm = pd.DataFrame(array22, index = [i for i in lli],
                   columns = [i for i in lli])
 plt.figure(figsize = (10,7))
 ax = sn.heatmap(df_cm, annot=True, cbar=False, cmap = "YlGn")
 ax.set(xlabel='Predicted label', ylabel='True label')
-

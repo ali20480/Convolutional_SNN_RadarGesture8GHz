@@ -49,11 +49,11 @@ def low_precision(state_dict,precision=4):
     return state_dict
 
 
-with open('pre_processed_dataset_5_class/data_set_k48_B50_z2.npy', 'rb') as f:
+with open('dataset_5_class/data_set_k48_B50_z2.npy', 'rb') as f:
     data_set = np.load(f)
     #Test_set_down = np.reshape(Test_set_down, (Test_set_down.shape[0], Test_set_down.shape[1], x_sz, y_sz))
     
-with open('pre_processed_dataset_5_class/labels_k48_B50_z2.npy', 'rb') as f:
+with open('dataset_5_class/labels_k48_B50_z2.npy', 'rb') as f:
     labels_data = np.load(f)
     
     
@@ -99,7 +99,7 @@ def train(model, train_loader, optimizer, epochs, batch_size, precision = 4):
     for e in range(epochs):
         train_acc = 0
         train_loss_sum = 0
-        print(model.state_dict())
+        #print(model.state_dict())
         for i, (images, labels) in enumerate(train_loader):
             
             optimizer.zero_grad()
