@@ -5,7 +5,9 @@ Link to the paper: https://arxiv.org/abs/2108.02669
 
 ## Example code
 
-Please run **SNN_train.py** for training the convolutional SNN or **SNN_test.py** for a quick test using saved SNN models. 
+Please run **SNN_12_class_train.py** or **SNN_5_class_train.py**  for training the convolutional SNN.
+
+Run **SNN_12_class_test.py** or **SNN_5_class_test.py** for a quick test using saved SNN models. 
 
 # How to cite
 
