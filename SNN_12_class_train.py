@@ -1,7 +1,7 @@
 """
 Train eCNN based on LeNet-5 architecture
 Gesture recognition using 8GHz Radar
-Author: Ali Safa - IMEC- KU Leuven
+Author: Ali Safa - IMEC- KU Leuven, Federico Corradi - IMEC-NL
 """
 ################highest accuracy config#####################
 import numpy as np

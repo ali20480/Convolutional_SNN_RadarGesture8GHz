@@ -1,7 +1,7 @@
 """
 Test Convolutional SNN
 Gesture recognition using 8GHz Radar
-Author: Ali Safa - IMEC- KU Leuven
+Authors: Ali Safa - IMEC- KU Leuven, Federico Corradi - IMEC-NL
 """
 
 import numpy as np
